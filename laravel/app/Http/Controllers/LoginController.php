@@ -2,31 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    /**
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => [
-                    __('auth.failed')
-                ]
-            ]);
-        }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        return $request->user();
+            return response()->json(Auth::user());
+        }
+        return response()->json([], 401);
     }
 
+    /**
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         Auth::logout();
