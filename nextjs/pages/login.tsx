@@ -1,14 +1,9 @@
 import { useState, ChangeEvent } from 'react';
 import axios from 'axios';
+import { User } from './types/User';
 
 
-
-interface User {
-  email: string;
-  name: string;
-}
-
-function App() {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [users, setUsers] = useState<User[]>([]);
@@ -20,11 +15,13 @@ function App() {
   });
 
   const login = () => {
-    http.get('/sanctum/csrf-cookie').then((res) => {
-      http.post('/api/login', { email, password }).then((res) => {
-        console.log(res);
+    http.get('/sanctum/csrf-cookie')
+      .then((res) => {
+        http.post('/api/login', { email, password })
+          .then((res) => {
+            console.log(res);
+          })
       })
-    })
   };
   const logout = () => {
     http.post('/api/logout').then((res) => {
@@ -69,4 +66,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;

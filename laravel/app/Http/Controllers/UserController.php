@@ -14,6 +14,8 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password')
         ]);
+        redirect('http://localhost:3000/login');
+
         return response()->json("User Create!!");
     }
 }
