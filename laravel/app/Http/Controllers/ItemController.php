@@ -18,7 +18,7 @@ class ItemController extends Controller
     {
         $item = Item::create([
             'item' => $request->input('item'),
-            'user_id' => $request->input('user_id')
+            'user_id' => $request->user()->id
         ]);
 
         return response()->json("created");

@@ -5,10 +5,9 @@ import Head from 'next/head';
 
 
 
+
+
 export default function UserCreate() {
-
-
-
 
 
   const [name, setName] = useState('');

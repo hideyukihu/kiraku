@@ -32,4 +32,4 @@ Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout']);
 
 Route::apiResource('user', UserController::class);
-Route::apiResource('item', ItemController::class);
+Route::apiResource('items', ItemController::class);
