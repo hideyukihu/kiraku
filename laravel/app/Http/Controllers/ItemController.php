@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemRequest;
 use App\Models\Item;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -11,14 +12,17 @@ class ItemController extends Controller
     public function index()
     {
         $items = Item::all();
+        $category = Category::all();
+        dd($category);
         return response()->json($items);
     }
 
     public function store(ItemRequest $request)
     {
         $item = Item::create([
-            'item' => $request->input('item'),
-            'user_id' => $request->user()->id
+            'name' => $request->input('name'),
+            'category_id' => $request->input('category_id'),
+            // 'user_id' => $request->user()->id
         ]);
 
         return response()->json("created");
