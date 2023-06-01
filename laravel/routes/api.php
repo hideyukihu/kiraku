@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,3 +34,4 @@ Route::post('logout', [LoginController::class, 'logout']);
 
 Route::apiResource('user', UserController::class);
 Route::apiResource('items', ItemController::class);
+Route::apiResource('categories', CategoryController::class);
