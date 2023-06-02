@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(ItemRequest $request)
     {
-        $items = Item::all();
-        $category = Category::all();
-        dd($category);
+        $items = Item::where('user_id', $request->user()->id)->get();
         return response()->json($items);
     }
 
@@ -22,7 +20,7 @@ class ItemController extends Controller
         $item = Item::create([
             'name' => $request->input('name'),
             'category_id' => $request->input('category_id'),
-            // 'user_id' => $request->user()->id
+            'user_id' => $request->user()->id
         ]);
 
         return response()->json("created");
