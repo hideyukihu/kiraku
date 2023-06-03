@@ -1,8 +1,8 @@
 import { useState, ChangeEvent, useEffect, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactFragment, ReactPortal } from 'react';
-import axios from 'axios';
 // import User from '../types/User';
 import Head from 'next/head';
 import Link from 'next/link';
+import { Axios } from '../utils/axios';
 
 
 export default function NameCreate() {
@@ -16,11 +16,6 @@ export default function NameCreate() {
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryId(e.target.value);
 
-  const http = axios.create({
-    baseURL: 'http://localhost',
-    withCredentials: true,
-  });
-
   useEffect(() => {
     categoryindex();
   }, []);
@@ -30,15 +25,20 @@ export default function NameCreate() {
   }, []);
 
   const itemcreate = () => {
-    http.post('/api/items', { name, category_id: selectedCategoryId })
+    Axios.post('/api/items', { name, category_id: selectedCategoryId })
       .then((res) => {
         console.log(res);
+        Axios.get('/api/items')
+        .then((res) => {
+          console.log(res.data);
+          setItem(res.data);
+        });
       });
   };
 
 
   const categoryindex = () => {
-    http.get('/api/categories')
+    Axios.get('/api/categories')
       .then((res) => {
         console.log(res.data);
         setCategory(res.data);
@@ -46,7 +46,7 @@ export default function NameCreate() {
   };
 
   const fetchItem = () => {
-    http.get('/api/items')
+    Axios.get('/api/items')
       .then((res) => {
         console.log(res.data);
         setItem(res.data);
@@ -64,7 +64,7 @@ export default function NameCreate() {
       <div>
         <label htmlFor="category_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カテゴリー</label>
         <div>
-          <select value={selectedCategoryId} onChange={onChangeCategory}>
+          <select value={selectedCategoryId} onChange={onChangeCategory} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">カテゴリーを選択してください</option>
             {category.map((category) => (
               <option key={category.id} value={category.id}>{category.name}</option>
@@ -73,7 +73,7 @@ export default function NameCreate() {
         </div>
       </div>
       <div>
-        <label htmlFor="item" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">name</label>
+        <label htmlFor="item" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">品名</label>
         <input value={name} onChange={onChangeName} type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
       </div>
 

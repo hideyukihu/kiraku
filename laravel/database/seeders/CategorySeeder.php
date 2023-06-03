@@ -19,6 +19,9 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => '生活雑貨',
+            ],
+            [
+                'name' => '生活雑貨',
             ]
         ]);
     }
