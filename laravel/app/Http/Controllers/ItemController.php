@@ -41,6 +41,7 @@ class ItemController extends Controller
     public function update(ItemRequest $request, $item)
     {
         $finditem = Item::find($item);
+        dd($finditem);
 
         if (!$finditem) {
             return response()->json(['message' => 'Item not found'], 404);

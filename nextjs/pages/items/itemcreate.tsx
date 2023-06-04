@@ -1,8 +1,9 @@
 import { useState, ChangeEvent, useEffect, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactFragment, ReactPortal } from 'react';
-// import User from '../types/User';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Axios } from '../utils/axios';
+import { Item } from '../types/Item';
+import { Category } from '../types/Category';
 
 
 export default function NameCreate() {
@@ -10,8 +11,8 @@ export default function NameCreate() {
 
   const [name, setName] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const [category, setCategory] = useState([]);
-  const [item, setItem] = useState([]);
+  const [category, setCategory] = useState<Category[]>([]);
+  const [item, setItem] = useState<Item[]>([]);
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryId(e.target.value);
@@ -28,11 +29,7 @@ export default function NameCreate() {
     Axios.post('/api/items', { name, category_id: selectedCategoryId })
       .then((res) => {
         console.log(res);
-        Axios.get('/api/items')
-        .then((res) => {
-          console.log(res.data);
-          setItem(res.data);
-        });
+        fetchItem();
       });
   };
 
@@ -50,6 +47,24 @@ export default function NameCreate() {
       .then((res) => {
         console.log(res.data);
         setItem(res.data);
+      });
+  };
+
+  const chengeItemIsPurchase = (id: any) => {
+    console.log('Clicked id:', id);
+    Axios.get(`/api/items/${id}`)
+      .then((res) => {
+        console.log(res.data);
+
+        const updatedItem = {
+          ...res.data,
+          ispurchase: 1,
+        };
+        // Axios.put(`/api/items/${id}`, updatedItem)
+        // .then((res) => {
+          
+        //   console.log(res.data);
+        // });
       });
   };
 
@@ -84,7 +99,7 @@ export default function NameCreate() {
       <Link href="/login" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン画面へ</Link>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
-        
+
       </h2>
 
 
@@ -93,8 +108,9 @@ export default function NameCreate() {
       </h2>
       {item.map((item) => (
         item.ispurchase === 0 && (
-          <div key={item.id}>
-            <p>{item.name}</p  >
+          <div key={item.id} className='flex m-1' >
+            <p className='w-1/3'>{item.name}</p>
+            <button onClick={() => chengeItemIsPurchase(item.id)} className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>購入済み</button>
           </div>
         )
       ))}
@@ -109,7 +125,7 @@ export default function NameCreate() {
         )
       ))}
 
-      
+
 
 
 
