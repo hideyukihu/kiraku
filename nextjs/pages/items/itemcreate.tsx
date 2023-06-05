@@ -60,11 +60,10 @@ export default function NameCreate() {
           ...res.data,
           ispurchase: 1,
         };
-        // Axios.put(`/api/items/${id}`, updatedItem)
-        // .then((res) => {
-          
-        //   console.log(res.data);
-        // });
+        Axios.put(`/api/items/${id}`, updatedItem)
+        .then((res) => {
+          console.log(res.data);
+        });
       });
   };
 
@@ -119,8 +118,9 @@ export default function NameCreate() {
       </h2>
       {item.map((item) => (
         item.ispurchase === 1 && (
-          <div key={item.id}>
-            <p>{item.name}</p>
+          <div key={item.id} className='flex m-1'>
+            <p className='w-1/3'>{item.name}</p>
+            <button className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>買い物リストへ戻す</button>
           </div>
         )
       ))}
