@@ -1,13 +1,12 @@
 import { useState, ChangeEvent, useEffect, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactFragment, ReactPortal } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Axios } from '../utils/axios';
+import Axios from '../utils/axios';
 import { Item } from '../types/Item';
 import { Category } from '../types/Category';
 
 
 export default function NameCreate() {
-
 
   const [name, setName] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
@@ -19,9 +18,6 @@ export default function NameCreate() {
 
   useEffect(() => {
     categoryindex();
-  }, []);
-
-  useEffect(() => {
     fetchItem();
   }, []);
 
@@ -51,18 +47,17 @@ export default function NameCreate() {
   };
 
   const chengeItemIsPurchase = (id: any) => {
-    console.log('Clicked id:', id);
     Axios.get(`/api/items/${id}`)
       .then((res) => {
         console.log(res.data);
-
         const updatedItem = {
           ...res.data,
-          ispurchase: 1,
+          ispurchase: res.data.ispurchase === 0 ? 1 : 0
         };
         Axios.put(`/api/items/${id}`, updatedItem)
         .then((res) => {
           console.log(res.data);
+          fetchItem();
         });
       });
   };
@@ -120,7 +115,7 @@ export default function NameCreate() {
         item.ispurchase === 1 && (
           <div key={item.id} className='flex m-1'>
             <p className='w-1/3'>{item.name}</p>
-            <button className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>買い物リストへ戻す</button>
+            <button onClick={() => chengeItemIsPurchase(item.id)} className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>買い物リストへ戻す</button>
           </div>
         )
       ))}
@@ -133,3 +128,9 @@ export default function NameCreate() {
     </>
   );
 }
+
+// export async function getServerSideProps(content:any) {
+//   return {
+//     props:{ message: 'helllo hideyukihu'}
+//   }
+// }

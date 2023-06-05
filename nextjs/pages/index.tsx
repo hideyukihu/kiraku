@@ -3,7 +3,7 @@ import { User } from './types/User';
 
 import Link from 'next/link';
 
-import { Axios } from './utils/axios';
+import Axios from './utils/axios';
 
 
 function Login() {
