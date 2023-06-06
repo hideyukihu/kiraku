@@ -11,6 +11,8 @@ class ItemController extends Controller
 {
     public function index(ItemRequest $request)
     {
+        $category =Item::find(1)->category->name;
+        dd($category);
         $items = Item::where('user_id', $request->user()->id)->get();
         return response()->json($items);
     }

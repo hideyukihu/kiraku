@@ -16,11 +16,20 @@ class UnitSeeder extends Seeder
 
             DB::table('units')->insert([
                 [
+                    'name' => 'kg',
+                ],
+                [
                     'name' => '個',
                 ],
                 [
                     'name' => 'パック',
                 ],
+                [
+                    'name' => 'ml',
+                ],
+                [
+                    'name' => 'l',
+                ]
 
             ]);
     }
