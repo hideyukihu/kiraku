@@ -1,50 +1,57 @@
 import { useState, ChangeEvent, useEffect, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactFragment, ReactPortal } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Axios from '../utils/axios';
+import createAxiosInstance from '../utils/axios';
 import { Item } from '../types/Item';
 import { Category } from '../types/Category';
 
 
-export default function NameCreate() {
+export default function ItemCreate() {
 
   const [name, setName] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [category, setCategory] = useState<Category[]>([]);
   const [item, setItem] = useState<Item[]>([]);
 
+  // 関数を呼び出してAxiosインスタンスを取得
+  const Axios = createAxiosInstance();
+
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryId(e.target.value);
 
   useEffect(() => {
+
+    const categoryindex = async () => {
+      await Axios.get('/api/categories')
+        .then((res) => {
+          console.log(res.data);
+          setCategory(res.data);
+        });
+    };
+    const fetchItem = async () => {
+      await Axios.get('/api/items')
+        .then((res) => {
+          console.log(res.data);
+          setItem(res.data);
+        });
+    };
+
     categoryindex();
     fetchItem();
+
+
   }, []);
 
   const itemcreate = () => {
     Axios.post('/api/items', { name, category_id: selectedCategoryId })
       .then((res) => {
         console.log(res);
-        fetchItem();
       });
   };
 
 
-  const categoryindex = () => {
-    Axios.get('/api/categories')
-      .then((res) => {
-        console.log(res.data);
-        setCategory(res.data);
-      });
-  };
 
-  const fetchItem = () => {
-    Axios.get('/api/items')
-      .then((res) => {
-        console.log(res.data);
-        setItem(res.data);
-      });
-  };
+
 
   const chengeItemIsPurchase = (id: any) => {
     Axios.get(`/api/items/${id}`)
@@ -55,10 +62,9 @@ export default function NameCreate() {
           ispurchase: res.data.ispurchase === 0 ? 1 : 0
         };
         Axios.put(`/api/items/${id}`, updatedItem)
-        .then((res) => {
-          console.log(res.data);
-          fetchItem();
-        });
+          .then((res) => {
+            console.log(res.data);
+          });
       });
   };
 
@@ -90,7 +96,7 @@ export default function NameCreate() {
 
 
       <button onClick={itemcreate} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
-      <Link href="/login" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン画面へ</Link>
+      <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン画面へ</Link>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
 

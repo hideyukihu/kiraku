@@ -3,13 +3,16 @@ import { User } from './types/User';
 
 import Link from 'next/link';
 
-import Axios from './utils/axios';
+import createAxiosInstance from './utils/axios';
 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [users, setUsers] = useState<User[]>([]);
+
+  const Axios = createAxiosInstance();
+
 
   const login = () => {
     Axios.get('/sanctum/csrf-cookie')

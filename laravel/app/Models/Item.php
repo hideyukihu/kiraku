@@ -12,6 +12,11 @@ class Item extends Model
 
     protected $fillable = ['name', 'created_at', 'updated_at', 'user_id', 'ispurchase', 'plan_quantity'];
 
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
+
+
     public function category():HasOne {
         return $this->hasOne(Category::class);
     }
