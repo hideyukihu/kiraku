@@ -10,7 +10,7 @@ class Item extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'category_id', 'created_at', 'updated_at', 'user_id', 'ispurchase'];
+    protected $fillable = ['name', 'created_at', 'updated_at', 'user_id', 'ispurchase', 'plan_quantity'];
 
     public function category():HasOne {
         return $this->hasOne(Category::class);

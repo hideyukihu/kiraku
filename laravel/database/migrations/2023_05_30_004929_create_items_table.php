@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('ispurchase')->default(false);
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->boolean('is_purchase')->default(false);
+            $table->integer('plan_quantity')->default(1);
             $table->timestamps();
         });
     }

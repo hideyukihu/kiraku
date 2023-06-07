@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory;
 
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'item_id'];
 
     public function item(): BelongsTo {
         return $this->belongsTo(Item::class);
