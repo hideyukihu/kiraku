@@ -6,7 +6,7 @@ import { Item } from '../types/Item';
 import { Category } from '../types/Category';
 
 
-export default function ItemCreate() {
+export default function List() {
 
   const [name, setName] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
@@ -158,7 +158,7 @@ export default function ItemCreate() {
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">購入済み</button>
+                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">買い物リストへ戻す</button>
                 </td>
               </tr>
             )
