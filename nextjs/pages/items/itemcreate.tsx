@@ -19,38 +19,35 @@ export default function ItemCreate() {
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryId(e.target.value);
 
+
+  const categoryindex = async () => {
+    await Axios.get('/api/categories')
+      .then((res) => {
+        console.log(res.data);
+        setCategory(res.data);
+      });
+  };
+  const fetchItem = async () => {
+    await Axios.get('/api/items')
+      .then((res) => {
+        console.log(res.data);
+        setItem(res.data);
+      });
+  };
+
   useEffect(() => {
-
-    const categoryindex = async () => {
-      await Axios.get('/api/categories')
-        .then((res) => {
-          console.log(res.data);
-          setCategory(res.data);
-        });
-    };
-    const fetchItem = async () => {
-      await Axios.get('/api/items')
-        .then((res) => {
-          console.log(res.data);
-          setItem(res.data);
-        });
-    };
-
     categoryindex();
     fetchItem();
 
 
   }, []);
 
-  const itemcreate = () => {
+  const itemstore = () => {
     Axios.post('/api/items', { name, category_id: selectedCategoryId })
       .then((res) => {
         console.log(res);
       });
   };
-
-
-
 
 
   const chengeItemIsPurchase = (id: any) => {
@@ -59,13 +56,19 @@ export default function ItemCreate() {
         console.log(res.data);
         const updatedItem = {
           ...res.data,
-          ispurchase: res.data.ispurchase === 0 ? 1 : 0
+          is_purchase: res.data.is_purchase === 0 ? 1 : 0
         };
         Axios.put(`/api/items/${id}`, updatedItem)
           .then((res) => {
             console.log(res.data);
+            fetchItem();
+
           });
+
+
       });
+
+
   };
 
   return (
@@ -95,7 +98,7 @@ export default function ItemCreate() {
 
 
 
-      <button onClick={itemcreate} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
+      <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
       <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン画面へ</Link>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
@@ -106,29 +109,62 @@ export default function ItemCreate() {
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
         買い物リスト
       </h2>
-      {item.map((item) => (
-        item.ispurchase === 0 && (
-          <div key={item.id} className='flex m-1' >
-            <p className='w-1/3'>{item.name}</p>
-            <button onClick={() => chengeItemIsPurchase(item.id)} className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>購入済み</button>
-          </div>
-        )
-      ))}
+      <table className="bg-white min-w-full">
+        <thead>
+          <tr>
+            <th className="w-1/3  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              品名
+            </th>
+            <th className="w-1/3  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              数量
+            </th>
+            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {item.map((item) => (
+            item.is_purchase === 0 && (
+              <tr key={item.id} className="text-gray-700">
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
+                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">購入済み</button>
+                </td>
+              </tr>
+            )
+          ))}
+        </tbody>
+      </table>
+
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
         購入済みリスト
       </h2>
-      {item.map((item) => (
-        item.ispurchase === 1 && (
-          <div key={item.id} className='flex m-1'>
-            <p className='w-1/3'>{item.name}</p>
-            <button onClick={() => chengeItemIsPurchase(item.id)} className='bg-green-500 hover:bg-green-400 text-white rounded px-4 py-2'>買い物リストへ戻す</button>
-          </div>
-        )
-      ))}
-
-
-
-
+      <table className="bg-white min-w-full">
+        <thead>
+          <tr>
+            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              品名
+            </th>
+            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              数量
+            </th>
+            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {item.map((item) => (
+            item.is_purchase === 1 && (
+              <tr key={item.id} className="text-gray-700">
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
+                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">購入済み</button>
+                </td>
+              </tr>
+            )
+          ))}
+        </tbody>
+      </table>
 
 
     </>

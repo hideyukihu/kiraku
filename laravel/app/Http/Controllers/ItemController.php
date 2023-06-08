@@ -11,12 +11,14 @@ class ItemController extends Controller
 {
     public function index(ItemRequest $request)
     {
-        $i =Item::find(1)->users[0]->name;
+
+        $userId = $request->user()->id;
+
+        $items = Item::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
 
 
-        dd($i);
-
-        $items = Item::where('user_id', $request->user()->id)->get();
         return response()->json($items);
     }
 
@@ -51,7 +53,7 @@ class ItemController extends Controller
             return response()->json(['message' => 'Item not found'], 404);
         }
 
-        $finditem->ispurchase = $request->input('ispurchase');
+        $finditem->is_purchase = $request->input('is_purchase');
         $finditem->save();
 
 

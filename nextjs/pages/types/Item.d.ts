@@ -1,6 +1,6 @@
 export type Item = {
   id:number;
   name :string;
-  ispurchase:number;
+  is_purchase:number;
   plan_quantity: number;
 }
