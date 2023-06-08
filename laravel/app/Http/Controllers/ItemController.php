@@ -11,6 +11,11 @@ class ItemController extends Controller
 {
     public function index(ItemRequest $request)
     {
+        $i =Item::find(1)->users[0]->name;
+
+
+        dd($i);
+
         $items = Item::where('user_id', $request->user()->id)->get();
         return response()->json($items);
     }
