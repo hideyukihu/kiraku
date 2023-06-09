@@ -30,6 +30,9 @@ class UnitSeeder extends Seeder
                 [
                     'name' => 'パック',
                 ],
+                [
+                    'name' => 'セット'
+                ]
 
 
             ]);

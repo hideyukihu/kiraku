@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('is_purchase')->default(false);
-            $table->integer('plan_quantity')->default(1);
+            $table->unsignedBigInteger('category_id')->default(0);
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->unsignedBigInteger('unit_id')->nullable();
+            $table->foreign('unit_id')->references('id')->on('units');
             $table->timestamps();
         });
     }
