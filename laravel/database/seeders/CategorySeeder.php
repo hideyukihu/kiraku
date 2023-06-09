@@ -22,6 +22,10 @@ class CategorySeeder extends Seeder
                 'name' => '生活雑貨',
                 'item_id' => 2
             ],
+            [
+                'name' => '化粧品',
+                'item_id' => 3
+            ],
         ]);
     }
 }

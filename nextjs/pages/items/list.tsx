@@ -9,7 +9,7 @@ import { Category } from '../types/Category';
 export default function List() {
 
   const [name, setName] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [category, setCategory] = useState<Category[]>([]);
   const [item, setItem] = useState<Item[]>([]);
 
@@ -17,7 +17,7 @@ export default function List() {
   const Axios = createAxiosInstance();
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
-  const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryId(e.target.value);
+  const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryName(e.target.value);
 
 
   const categoryindex = async () => {
@@ -43,7 +43,7 @@ export default function List() {
   }, []);
 
   const itemstore = () => {
-    Axios.post('/api/items', { name, category_id: selectedCategoryId })
+    Axios.post('/api/items', { name, categoryname: selectedCategoryName })
       .then((res) => {
         console.log(res);
       });
@@ -81,12 +81,12 @@ export default function List() {
 
 
       <div>
-        <label htmlFor="category_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カテゴリー</label>
+        <label htmlFor="categoryname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カテゴリー</label>
         <div>
-          <select value={selectedCategoryId} onChange={onChangeCategory} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <select value={selectedCategoryName} onChange={onChangeCategory} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">カテゴリーを選択してください</option>
             {category.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
+              <option key={category.id} value={category.name}>{category.name}</option>
             ))}
           </select>
         </div>
@@ -95,8 +95,6 @@ export default function List() {
         <label htmlFor="item" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">品名</label>
         <input value={name} onChange={onChangeName} type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
       </div>
-
-
 
 
       <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
@@ -129,7 +127,7 @@ export default function List() {
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">購入済み</button>
+                  <button onClick={() => chengeItemIsPurchase(item.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
                 </td>
               </tr>
             )
@@ -159,7 +157,7 @@ export default function List() {
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengeItemIsPurchase(item.id)} className="bg-green-500 hover:bg-green-400 text-white px-4 py-2">買い物リストへ戻す</button>
+                  <button onClick={() => chengeItemIsPurchase(item.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
               </tr>
             )

@@ -23,6 +23,9 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'トイレットペーパー',
             ],
+            [
+                'name' => 'ファンデーション',
+            ],
         ]);
     }
 }

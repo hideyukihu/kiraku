@@ -36,6 +36,11 @@ class ItemController extends Controller
             'user_id' => $request->user()->id
         ]);
 
+        $item::find($itemId)->category()->create([
+            'user_id' => $itemId,
+            'name' => $request->categoryname
+        ]);
+
         return response()->json("created");
     }
 
