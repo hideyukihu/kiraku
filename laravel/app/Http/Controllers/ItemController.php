@@ -26,7 +26,13 @@ class ItemController extends Controller
     {
         $item = Item::create([
             'name' => $request->input('name'),
-            'category_id' => $request->input('category_id'),
+        ]);
+
+        $userId = $request->user()->id;
+        $itemId = $item->id;
+
+        $item->users()->attach($userId,[
+            'item_id' => $itemId,
             'user_id' => $request->user()->id
         ]);
 

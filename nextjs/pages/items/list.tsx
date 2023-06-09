@@ -47,6 +47,7 @@ export default function List() {
       .then((res) => {
         console.log(res);
       });
+      fetchItem();
   };
 
 
