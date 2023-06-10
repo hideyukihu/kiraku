@@ -11,3 +11,4 @@ class Plan extends Model
 
     protected $fillable = ['is_purchase', 'quantity', 'user_id', 'item_id'];
 }
+
