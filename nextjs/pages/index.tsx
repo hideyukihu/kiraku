@@ -1,5 +1,6 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent,  } from 'react';
 import { User } from './types/User'; 
+import { useRouter } from 'next/router';
 
 import Link from 'next/link';
 
@@ -10,6 +11,8 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [users, setUsers] = useState<User[]>([]);
+  const router = useRouter();
+
 
   const Axios = createAxiosInstance();
 
@@ -20,8 +23,19 @@ function Login() {
         Axios.post('/api/login', { email, password })
           .then((res) => {
             console.log(res);
+            router.push('/items/list');
           })
+          .catch((error) => {
+            console.error(error);
+            // 認証失敗時に現在の画面に戻る
+            router.push('/');
+          });
       })
+      .catch((error) => {
+        console.error(error);
+        // 認証失敗時に現在の画面に戻る
+        router.push('/');
+      });
   };
   const logout = () => {
     Axios.post('/api/logout').then((res) => {
@@ -49,7 +63,7 @@ function Login() {
       </div>
 
       <nav className='my-5'>
-        <button onClick={login} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン</button>
+        <button onClick={login}className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン</button>
         <button onClick={logout} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログアウト</button>
         <button onClick={getUsers} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">User 一覧</button>
         <button onClick={reset} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">リセット</button>

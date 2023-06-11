@@ -21,8 +21,13 @@ use App\Http\Controllers\PlanController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('users', function () {
-    return User::all();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResources([
+        'users' => UserController::class,
+        'items' => ItemController::class,
+        'plans' => PlanController::class,
+        'categories' => CategoryController::class,
+    ]);
 });
 
 // Route::get('users', function () {
@@ -33,7 +38,3 @@ Route::middleware('auth:sanctum')->get('users', function () {
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout']);
 
-Route::apiResource('user', UserController::class);
-Route::apiResource('items', ItemController::class);
-Route::apiResource('plans', PlanController::class);
-Route::apiResource('categories', CategoryController::class);
