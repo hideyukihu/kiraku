@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,5 @@ Route::post('logout', [LoginController::class, 'logout']);
 
 Route::apiResource('user', UserController::class);
 Route::apiResource('items', ItemController::class);
+Route::apiResource('plans', PlanController::class);
 Route::apiResource('categories', CategoryController::class);

@@ -13,7 +13,7 @@ class Category extends Model
 
     protected $fillable = ['name'];
 
-    public function item(): BelongsTo {
-        return $this->belongsTo(Item::class);
+    public function items() {
+        return $this->hasMany(Item::class);
     }
 }

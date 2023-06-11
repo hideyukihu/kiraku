@@ -45,7 +45,7 @@ class User extends Authenticatable
 
 
 
-    public function items() {
-        return $this->belongsToMany(Item::class);
+    public function plans() {
+        return $this->hasMany(Plan::class);
     }
 }

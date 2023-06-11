@@ -10,5 +10,17 @@ class Plan extends Model
     use HasFactory;
 
     protected $fillable = ['is_purchase', 'quantity', 'user_id', 'item_id'];
-}
 
+    public function items()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function purchase() {
+        return $this->hasOne(Purchase::class);
+    }
+}

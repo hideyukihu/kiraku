@@ -17,8 +17,12 @@ class Item extends Model
     }
 
 
-    public function category():HasOne {
-        return $this->hasOne(Category::class);
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function plans() {
+        return $this->hasMany(Plan::class);
     }
 
 }
