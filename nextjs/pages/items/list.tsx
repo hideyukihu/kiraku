@@ -4,20 +4,34 @@ import Link from 'next/link';
 import createAxiosInstance from '../utils/axios';
 import { Item } from '../types/Item';
 import { Category } from '../types/Category';
+import { Unit } from '../types/Unit';
 
 
 export default function List() {
 
-  const [name, setName] = useState('');
-  const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [category, setCategory] = useState<Category[]>([]);
-  const [item, setItem] = useState<Item[]>([]);
+  const [unit, setUnit] = useState<Unit[]>([]);
+  const [item, setItem] = useState<Item>({
+    name: '',
+    category_id: 1,
+    unit_id: 1,
+  });
+
+  console.log(item);
+
+  function handleChange(e:any){
+    
+  }
+
+
+
+
+
+
 
   // 関数を呼び出してAxiosインスタンスを取得
   const Axios = createAxiosInstance();
 
-  const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
-  const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>) => setSelectedCategoryName(e.target.value);
 
 
   const categoryindex = async () => {
@@ -27,27 +41,45 @@ export default function List() {
         setCategory(res.data);
       });
   };
-  const fetchItem = async () => {
-    await Axios.get('/api/items')
+
+  const unitindex = async () => {
+    await Axios.get('/api/units')
       .then((res) => {
         console.log(res.data);
-        setItem(res.data);
+        setUnit(res.data);
       });
   };
 
+  const planindex = async () => {
+    await Axios.get('/api/plans')
+      .then((res) => {
+        console.log(res.data);
+        setCategory(res.data);
+      });
+  };
+
+
+  // const fetchItem = async () => {
+  //   await Axios.get('/api/items')
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setItem(res.data);
+  //     });
+  // };
+
   useEffect(() => {
     categoryindex();
-    fetchItem();
+    unitindex();
+
 
 
   }, []);
 
-  const itemstore = () => {
-    Axios.post('/api/items', { name, categoryname: selectedCategoryName })
+  const itemstore = async (item: Item) => {
+    await Axios.post('/api/items', item)
       .then((res) => {
         console.log(res);
       });
-      fetchItem();
   };
 
 
@@ -62,7 +94,7 @@ export default function List() {
         Axios.put(`/api/items/${id}`, updatedItem)
           .then((res) => {
             console.log(res.data);
-            fetchItem();
+            // fetchItem();
 
           });
 
@@ -83,35 +115,35 @@ export default function List() {
       <div>
         <label htmlFor="categoryname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カテゴリー</label>
         <div>
-          <select value={selectedCategoryName} onChange={onChangeCategory} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <select value={item.category_id} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">カテゴリーを選択してください</option>
             {category.map((category) => (
-              <option key={category.id} value={category.name}>{category.name}</option>
+              <option key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
         </div>
       </div>
       <div>
         <label htmlFor="item" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">品名</label>
-        <input value={name} onChange={onChangeName} type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+        <input type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
       </div>
 
       <div>
         <label htmlFor="categoryname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">単位</label>
         <div>
-          <select value={selectedCategoryName} onChange={onChangeCategory} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">カテゴリーを選択してください</option>
-            {category.map((category) => (
-              <option key={category.id} value={category.name}>{category.name}</option>
+          <select value={item.unit_id} onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">単位を選択してください</option>
+            {unit.map((unit) => (
+              <option key={unit.id} value={unit.id}>{unit.name}</option>
             ))}
           </select>
         </div>
       </div>
-      
 
 
-      <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
-      <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログイン画面へ</Link>
+
+      {/* <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button> */}
+      <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ログイン画面へ</Link>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
 
@@ -133,7 +165,7 @@ export default function List() {
             <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {item.map((item) => (
             item.is_purchase === 0 && (
               <tr key={item.id} className="text-gray-700">
@@ -145,7 +177,7 @@ export default function List() {
               </tr>
             )
           ))}
-        </tbody>
+        </tbody> */}
       </table>
 
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
@@ -163,7 +195,7 @@ export default function List() {
             <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {item.map((item) => (
             item.is_purchase === 1 && (
               <tr key={item.id} className="text-gray-700">
@@ -175,7 +207,7 @@ export default function List() {
               </tr>
             )
           ))}
-        </tbody>
+        </tbody> */}
       </table>
 
 

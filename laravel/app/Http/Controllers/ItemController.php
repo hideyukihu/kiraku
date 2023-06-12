@@ -14,9 +14,7 @@ class ItemController extends Controller
 
         $userId = $request->user()->id;
 
-        $items = Item::whereHas('users', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->get();
+        $items = Item::where($userId)->get();
 
 
         return response()->json($items);
@@ -26,19 +24,8 @@ class ItemController extends Controller
     {
         $item = Item::create([
             'name' => $request->input('name'),
-        ]);
-
-        $userId = $request->user()->id;
-        $itemId = $item->id;
-
-        $item->users()->attach($userId,[
-            'item_id' => $itemId,
-            'user_id' => $request->user()->id
-        ]);
-
-        $item::find($itemId)->category()->create([
-            'user_id' => $itemId,
-            'name' => $request->categoryname
+            'category_id' => $request->input('category_id'),
+            'unit_id' => $request->input('unit_id'),
         ]);
 
         return response()->json("created");

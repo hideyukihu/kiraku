@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'items' => ItemController::class,
         'plans' => PlanController::class,
         'categories' => CategoryController::class,
+        'units' => UnitController::class,
     ]);
 });
 
