@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePlanRequest;
-use App\Http\Requests\UpdatePlanRequest;
+use App\Http\Requests\PlanRequest;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 
@@ -32,7 +31,7 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePlanRequest $request)
+    public function store()
     {
         //
     }
@@ -40,9 +39,15 @@ class PlanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Plan $plan)
+    public function show($plan)
     {
-        //
+        $findplan = Plan::find($plan);
+
+        if (!$findplan) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        return response()->json($findplan);
     }
 
     /**
@@ -56,9 +61,19 @@ class PlanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePlanRequest $request, Plan $plan)
+    public function update(PlanRequest $request, $plan)
     {
-        //
+        $findplan = Plan::find($plan);
+
+        if (!$findplan) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        $findplan->is_purchase = $request->input('is_purchase');
+        $findplan->save();
+
+
+        return response()->json($findplan);
     }
 
     /**

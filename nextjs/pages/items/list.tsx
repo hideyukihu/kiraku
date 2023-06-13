@@ -5,6 +5,7 @@ import createAxiosInstance from '../utils/axios';
 import { Item } from '../types/Item';
 import { Category } from '../types/Category';
 import { Unit } from '../types/Unit';
+import { Plan } from '../types/Plan';
 
 
 export default function List() {
@@ -13,21 +14,22 @@ export default function List() {
   const [unit, setUnit] = useState<Unit[]>([]);
   const [item, setItem] = useState<Item>({
     name: '',
-    category_id: 1,
-    unit_id: 1,
+    category_id: 0,
+    unit_id: 0,
   });
+  const [plan, setPlan] = useState<Plan[]>([]);
 
-  
-  function handleChangeCategory(e:any){
-    setItem({name: item.name, category_id: e.target.value, unit_id: item.unit_id});
+
+  function handleChangeCategory(e: any) {
+    setItem({ name: item.name, category_id: e.target.value, unit_id: item.unit_id });
   }
-  function handleChangeUnit(e:any){
-    setItem({name: item.name, category_id: item.category_id, unit_id: e.target.value});
+  function handleChangeUnit(e: any) {
+    setItem({ name: item.name, category_id: item.category_id, unit_id: e.target.value });
   }
-  function handleChangeName(e:any){
-    setItem({name: e.target.value, category_id: item.category_id, unit_id: item.unit_id});
+  function handleChangeName(e: any) {
+    setItem({ name: e.target.value, category_id: item.category_id, unit_id: item.unit_id });
   }
-  
+
   console.log(item);
 
 
@@ -60,28 +62,21 @@ export default function List() {
     await Axios.get('/api/plans')
       .then((res) => {
         console.log(res.data);
-        setCategory(res.data);
+        setPlan(res.data);
       });
   };
-
-
-  // const fetchItem = async () => {
-  //   await Axios.get('/api/items')
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setItem(res.data);
-  //     });
-  // };
 
   useEffect(() => {
     categoryindex();
     unitindex();
+    planindex();
+
 
 
 
   }, []);
 
-  const itemstore = async (item: Item) => {
+  const itemstore = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await Axios.post('/api/items', item)
       .then((res) => {
         console.log(res);
@@ -89,18 +84,18 @@ export default function List() {
   };
 
 
-  const chengeItemIsPurchase = (id: any) => {
-    Axios.get(`/api/items/${id}`)
+  const chengePlanIsPurchase = (id: any) => {
+    Axios.get(`/api/plans/${id}`)
       .then((res) => {
         console.log(res.data);
-        const updatedItem = {
+        const updatedPlan = {
           ...res.data,
           is_purchase: res.data.is_purchase === 0 ? 1 : 0
         };
-        Axios.put(`/api/items/${id}`, updatedItem)
+        Axios.put(`/api/plans/${id}`, updatedPlan)
           .then((res) => {
             console.log(res.data);
-            // fetchItem();
+            planindex();
 
           });
 
@@ -148,7 +143,7 @@ export default function List() {
 
 
 
-      {/* <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button> */}
+      <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
       <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ログイン画面へ</Link>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
@@ -171,19 +166,23 @@ export default function List() {
             <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
-        {/* <tbody>
-          {item.map((item) => (
-            item.is_purchase === 0 && (
-              <tr key={item.id} className="text-gray-700">
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengeItemIsPurchase(item.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
-                </td>
-              </tr>
-            )
-          ))}
-        </tbody> */}
+        <tbody>
+          {plan.map((plan:any) => {
+            if (plan.is_purchase === 0) {
+              return (
+                <tr key={plan.id} className="text-gray-700">
+                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.item_id}</td>
+                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
+                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
+                    <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
+                  </td>
+                </tr>
+              );
+            }
+            return null;  // is_purchaseが0でない場合は何も表示しない
+          })}
+        </tbody>
+
       </table>
 
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
@@ -201,19 +200,19 @@ export default function List() {
             <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
-        {/* <tbody>
-          {item.map((item) => (
-            item.is_purchase === 1 && (
-              <tr key={item.id} className="text-gray-700">
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.name}</td>
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{item.plan_quantity}</td>
+        <tbody>
+          {plan.map((plan:any) => (
+            plan.is_purchase === 1 && (
+              <tr key={plan.id} className="text-gray-700">
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.item_id}</td>
+                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
                 <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengeItemIsPurchase(item.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
+                  <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
               </tr>
             )
           ))}
-        </tbody> */}
+        </tbody>
       </table>
 
 
