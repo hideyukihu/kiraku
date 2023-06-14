@@ -15,9 +15,11 @@ class PlanController extends Controller
     {
         $userId = $request->user()->id;
 
-        $plan =Plan::find($userId)->get();
+        $plans = Plan::with('items')
+                ->where('user_id', $userId)
+                ->get();
 
-        return response()->json($plan);
+        return response()->json($plans);
     }
 
     /**
