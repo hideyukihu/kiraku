@@ -28,7 +28,10 @@ class ItemController extends Controller
             'unit_id' => $request->input('unit_id'),
         ]);
 
-        return response()->json("created");
+        $createdId = $item->id;
+
+        return response()->json(['item_id' => $createdId]);
+
     }
 
 

@@ -80,6 +80,13 @@ export default function List() {
     await Axios.post('/api/items', item)
       .then((res) => {
         console.log(res);
+        
+        Axios.post('/api/plans', res.data)
+        .then((res) => {
+          console.log(res);
+          planindex();
+        })
+        
       });
   };
 

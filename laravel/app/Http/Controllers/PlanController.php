@@ -21,19 +21,16 @@ class PlanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        Plan::create([
+            'item_id' => $request->input('item_id'),
+            'user_id' => $request->user()->id
+        ]);
+
+        return response()->json('created');
     }
 
     /**
