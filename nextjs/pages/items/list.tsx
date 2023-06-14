@@ -6,9 +6,11 @@ import { Item } from '../types/Item';
 import { Category } from '../types/Category';
 import { Unit } from '../types/Unit';
 import { Plan } from '../types/Plan';
+import { useRouter } from 'next/router';
 
 
 export default function List() {
+  const router = useRouter();
 
   const [category, setCategory] = useState<Category[]>([]);
   const [unit, setUnit] = useState<Unit[]>([]);
@@ -64,6 +66,13 @@ export default function List() {
         console.log(res.data);
         setPlan(res.data);
       });
+  };
+
+  const logout = () => {
+    Axios.post('/api/logout').then((res) => {
+      console.log(res);
+      router.push('/');
+    })
   };
 
   useEffect(() => {
@@ -150,8 +159,7 @@ export default function List() {
 
 
 
-      <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-2">登録</button>
-      <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ログイン画面へ</Link>
+      <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2">登録</button>
 
       <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
 
@@ -164,14 +172,18 @@ export default function List() {
       <table className="bg-white min-w-full">
         <thead>
           <tr>
-            <th className="w-1/3  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               品名
             </th>
-            <th className="w-1/3  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               数量
             </th>
+            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              単位
+            </th>
             
-            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
+            
+            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
         <tbody>
@@ -179,9 +191,10 @@ export default function List() {
             if (plan.is_purchase === 0) {
               return (
                 <tr key={plan.id} className="text-gray-700">
-                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                  <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
+                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
+                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
+                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
+                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                     <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
                   </td>
                 </tr>
@@ -199,22 +212,26 @@ export default function List() {
       <table className="bg-white min-w-full">
         <thead>
           <tr>
-            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               品名
             </th>
-            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               数量
             </th>
-            <th className="w-1/3 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
+            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+              単位
+            </th>
+            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
         <tbody>
           {plan.map((plan:any) => (
             plan.is_purchase === 1 && (
               <tr key={plan.id} className="text-gray-700">
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                <td className="w-1/3 border-b-2 p-4 dark:border-dark-5">
+                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
+                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
+                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
+                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                   <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
               </tr>
@@ -222,6 +239,9 @@ export default function List() {
           ))}
         </tbody>
       </table>
+
+      <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block my-2">ログイン画面へ</Link>
+      <button onClick={logout} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログアウト</button>
 
 
 

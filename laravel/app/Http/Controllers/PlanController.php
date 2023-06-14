@@ -15,7 +15,7 @@ class PlanController extends Controller
     {
         $userId = $request->user()->id;
 
-        $plans = Plan::with('items')
+        $plans = Plan::with('items.category', 'items.unit')
                 ->where('user_id', $userId)
                 ->get();
 

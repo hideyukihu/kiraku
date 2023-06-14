@@ -16,11 +16,23 @@ class Plan extends Model
         return $this->belongsTo(Item::class, 'item_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function purchase() {
+    public function purchase()
+    {
         return $this->hasOne(Purchase::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }
