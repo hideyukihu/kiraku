@@ -22,7 +22,7 @@ export default function UserCreate() {
   });
 
   const usercreate = () => {
-    http.post('/api/user', { name, email, password })
+    http.post('/api/users', { name, email, password })
       .then((res) => {
         console.log(res);
       });
