@@ -18,6 +18,7 @@
 Laravel 
 React,Next.jsにてSPA化
 RESTAPI
+バックエンドとフロントエンド（SPA）を切り分けて実装
 
 
 
