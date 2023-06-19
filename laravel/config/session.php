@@ -198,4 +198,7 @@ return [
 
     'same_site' => 'lax',
 
+    'csrf_cookie' => true,
+
+
 ];

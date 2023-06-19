@@ -24,7 +24,7 @@ use App\Http\Controllers\UnitController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources([
-        'users' => UserController::class,
+
         'items' => ItemController::class,
         'plans' => PlanController::class,
         'categories' => CategoryController::class,
@@ -39,4 +39,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout']);
-
+Route::apiResources(['users' => UserController::class]);

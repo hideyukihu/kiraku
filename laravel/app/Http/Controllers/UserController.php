@@ -16,7 +16,7 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password')
         ]);
-        redirect('http://localhost:3000/login');
+        // redirect('http://localhost/login');
 
         Mail::to($request->user())->send(new RegistUser($user));
 

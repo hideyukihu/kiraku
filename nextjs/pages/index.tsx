@@ -22,7 +22,7 @@ function Login() {
       .then((res) => {
         Axios.post('/api/login', { email, password })
           .then((res) => {
-            console.log(res);
+            console.log(res); 
             router.push('/items/list');
           })
           .catch((error) => {

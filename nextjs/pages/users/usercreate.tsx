@@ -22,9 +22,13 @@ export default function UserCreate() {
   });
 
   const usercreate = () => {
-    http.post('/api/users', { name, email, password })
+    http.get('sanctum/csrf-cookie') // CSRFトークンを取得するリクエスト
       .then((res) => {
         console.log(res);
+        http.post('/api/users', { name, email, password }) // ユーザー作成リクエスト
+          .then((res) => {
+            console.log(res);
+          });
       });
   };
 
