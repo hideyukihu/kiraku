@@ -14,7 +14,6 @@ export default function UserCreate() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [users, setUsers] = useState<User[]>([]);
 
   const http = axios.create({
     baseURL: 'http://localhost',
@@ -22,8 +21,8 @@ export default function UserCreate() {
   });
 
   const usercreate = () => {
-    http.get('sanctum/csrf-cookie') // CSRFトークンを取得するリクエスト
-      .then((res) => {
+    http.get('/sanctum/csrf-cookie') // CSRFトークンを取得するリクエスト
+      .then(res => {
         console.log(res);
         http.post('/api/users', { name, email, password }) // ユーザー作成リクエスト
           .then((res) => {
