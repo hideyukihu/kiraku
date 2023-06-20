@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        名前: {{ $user->name }}
+        登録完了しました
     </div>
 </body>
 </html>

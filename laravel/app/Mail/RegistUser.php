@@ -39,9 +39,10 @@ class RegistUser extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.emails.regist',
+            view: 'emails.regist',
         );
     }
+
 
     /**
      * Get the attachments for the message.

@@ -19,7 +19,10 @@ class UserController extends Controller
         redirect('http://localhost/login');
         $request->session()->regenerate();
 
-        Mail::to($request->user())->send(new RegistUser($user));
+        Mail::to($user->email)
+            ->cc('')
+            ->bcc('')
+            ->send(new RegistUser($user));
 
         return response()->json("User Create!!");
     }
