@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        Price: {{ $user->name }}
+        名前: {{ $user->name }}
     </div>
 </body>
 </html>
