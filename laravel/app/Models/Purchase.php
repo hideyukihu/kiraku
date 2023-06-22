@@ -9,7 +9,8 @@ class Purchase extends Model
 {
     use HasFactory;
 
-    public function plan() {
+    public function plan()
+    {
         return $this->belongsTo(Plan::class);
     }
 }
