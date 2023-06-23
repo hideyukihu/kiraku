@@ -36,6 +36,7 @@ class PurchaseController extends Controller
                 'date' => now()
             ]
         );
+        return response()->json('purchase store');
     }
 
     /**
