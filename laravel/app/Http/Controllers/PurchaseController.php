@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
 use App\Models\Purchase;
+use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
@@ -27,12 +28,13 @@ class PurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePurchaseRequest $request)
+    public function store(Request $request)
     {
         Purchase::create(
             [
-                'quantity' => $request->input('quantity'),
+                // 'quantity' => $request->input('quantity'),
                 'plan_id' => $request->input('plan_id'),
+                'quantity' => 1,
                 'date' => now()
             ]
         );

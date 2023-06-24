@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'plans' => PlanController::class,
         'categories' => CategoryController::class,
         'units' => UnitController::class,
-        'purchses' => PurchaseController::class
+        'purchases' => PurchaseController::class
     ]);
 });
 

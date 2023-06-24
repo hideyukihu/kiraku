@@ -9,6 +9,8 @@ class Purchase extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['quantity', 'plan_id', 'date'];
+
     public function plan()
     {
         return $this->belongsTo(Plan::class);

@@ -109,7 +109,7 @@ export default function List() {
           is_purchase: res.data.is_purchase === 0 ? 1 : 0
           
         };
-        Axios.post('/api/purchases/${id}', res.data)
+        Axios.post(`/api/purchases`, {plan_id: id})
           .then((res: any) => {
 
           });
