@@ -109,16 +109,20 @@ export default function List() {
           is_purchase: res.data.is_purchase === 0 ? 1 : 0
           
         };
-        Axios.post(`/api/purchases`, {plan_id: id})
-          .then((res: any) => {
 
-          });
         Axios.put(`/api/plans/${id}`, updatedPlan)
           .then((res :any) => {
             console.log(res.data);
+
             planindex();
 
           });
+          if(updatedPlan.is_purchase === 1) {
+            Axios.post(`/api/purchases`, {plan_id: id})
+            .then((res: any) => {
+  
+            });
+          }
 
 
       });
