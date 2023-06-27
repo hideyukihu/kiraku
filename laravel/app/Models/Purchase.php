@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Purchase extends Model
 {
@@ -14,5 +15,13 @@ class Purchase extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public static function calculateAverageCreatedAtByQuantity($planId)
+    {
+        return self::select('quantity', DB::raw('AVG(created_at) as average_created_at'))
+            ->where('plan_id', $planId)
+            ->groupBy('quantity')
+            ->get();
     }
 }

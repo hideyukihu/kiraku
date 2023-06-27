@@ -72,4 +72,6 @@ class PurchaseController extends Controller
     {
         //
     }
+
+    
 }
