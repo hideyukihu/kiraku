@@ -16,12 +16,4 @@ class Purchase extends Model
     {
         return $this->belongsTo(Plan::class);
     }
-
-    public static function calculateAverageCreatedAtByQuantity($planId)
-    {
-        return self::select('quantity', DB::raw('AVG(created_at) as average_created_at'))
-            ->where('plan_id', $planId)
-            ->groupBy('quantity')
-            ->get();
-    }
 }

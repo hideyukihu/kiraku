@@ -29,8 +29,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'plans' => PlanController::class,
         'categories' => CategoryController::class,
         'units' => UnitController::class,
-        'purchases' => PurchaseController::class
+        'purchases' => PurchaseController::class,
     ]);
+});
+
+Route::middleware('auth:sanctun')->group(function() {
+    Route::post('purchases/average-consumption',[PurchaseController::class, 'averageComsumption'])->name('purchases.average');
 });
 
 // Route::get('users', function () {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
 use App\Models\Purchase;
+use App\Services\PurchaseService;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -73,5 +74,10 @@ class PurchaseController extends Controller
         //
     }
 
-    
+    public function averageComsumption(Request $request, PurchaseService $purchaseService) {
+        $planId = $request->input('planId');
+        $purchaseService->calculateAverageCreatedAtByQuantity($planId);
+    }
+
+
 }
