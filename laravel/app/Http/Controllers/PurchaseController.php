@@ -75,8 +75,9 @@ class PurchaseController extends Controller
     }
 
     public function averageComsumption(Request $request, PurchaseService $purchaseService) {
-        $planId = $request->input('planId');
-        $purchaseService->calculateAverageConsumptionDaysPerQuantity($planId);
+        $planId = $request->input('plan_id');
+        $resuit = $purchaseService->calculateAverageConsumptionDaysPerQuantity($planId);
+        return response()->json($resuit);
     }
 
 

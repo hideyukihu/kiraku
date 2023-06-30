@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
 });
 
-Route::middleware('auth:sanctun')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
     Route::post('purchases/average-consumption',[PurchaseController::class, 'averageComsumption'])->name('purchases.average');
 });
 

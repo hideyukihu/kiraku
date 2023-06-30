@@ -7,6 +7,7 @@ import { Category } from '../types/Category';
 import { Unit } from '../types/Unit';
 import { Plan } from '../types/Plan';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 
 export default function List() {
@@ -20,6 +21,7 @@ export default function List() {
     unit_id: 0,
   });
   const [plan, setPlan] = useState<Plan[]>([]);
+  const [averageComsumption, setAverageComsumption] = useState([]);
 
 
   function handleChangeCategory(e: any) {
@@ -89,13 +91,13 @@ export default function List() {
     await Axios.post('/api/items', item)
       .then((res) => {
         console.log(res);
-        
+
         Axios.post('/api/plans', res.data)
-        .then((res) => {
-          console.log(res);
-          planindex();
-        })
-        
+          .then((res) => {
+            console.log(res);
+            planindex();
+          })
+
       });
   };
 
@@ -107,37 +109,37 @@ export default function List() {
         const updatedPlan = {
           ...res.data,
           is_purchase: res.data.is_purchase === 0 ? 1 : 0
-          
+
         };
 
         Axios.put(`/api/plans/${id}`, updatedPlan)
-          .then((res :any) => {
+          .then((res: any) => {
             console.log(res.data);
-
             planindex();
-
           });
-          if(updatedPlan.is_purchase === 1) {
-            Axios.post(`/api/purchases`, {plan_id: id})
+        if (updatedPlan.is_purchase === 1) {
+          Axios.post(`/api/purchases`, { plan_id: id })
             .then((res: any) => {
-  
             });
-          }
-
-
+        }
       });
+
+
+    Axios.post(`api/purchases/average-consumption`, { plan_id: id })
+      .then((res: any) => {
+        console.log(res.data);
+        setAverageComsumption(res.data);
+      });
+
 
 
   };
 
   return (
-
     <>
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
         買い物リスト登録
       </h2>
-
-
       <div>
         <label htmlFor="categoryname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カテゴリー</label>
         <div>
@@ -153,7 +155,6 @@ export default function List() {
         <label htmlFor="item" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">品名</label>
         <input value={item.name} onChange={handleChangeName} type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
       </div>
-
       <div>
         <label htmlFor="categoryname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">単位</label>
         <div>
@@ -166,14 +167,7 @@ export default function List() {
         </div>
       </div>
 
-
-
       <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2">登録</button>
-
-      <h2 className="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">
-
-      </h2>
-
 
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
         買い物リスト
@@ -184,25 +178,23 @@ export default function List() {
             <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               品名
             </th>
-            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               数量
             </th>
-            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               単位
             </th>
-            
-            
             <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
           </tr>
         </thead>
         <tbody>
-          {plan.map((plan:any) => {
+          {plan.map((plan: any) => {
             if (plan.is_purchase === 0) {
               return (
                 <tr key={plan.id} className="text-gray-700">
                   <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
+                  <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
+                  <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
                   <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                     <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
                   </td>
@@ -224,25 +216,27 @@ export default function List() {
             <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               品名
             </th>
-            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/12 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               数量
             </th>
-            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
+            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
               単位
             </th>
             <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
+            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">平均消費日数（日数/数量）</th>
           </tr>
         </thead>
         <tbody>
-          {plan.map((plan:any) => (
+          {plan.map((plan: any) => (
             plan.is_purchase === 1 && (
-              <tr key={plan.id} className="text-gray-700">
+              <tr key={plan.id} className="text-gray-700" data-value={plan.id}>
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                   <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption}</td>
               </tr>
             )
           ))}
