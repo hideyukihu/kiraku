@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePurchaseRequest;
 use App\Models\Purchase;
 use App\Services\PurchaseService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PurchaseController extends Controller
 {
@@ -75,10 +76,17 @@ class PurchaseController extends Controller
     }
 
     public function averageComsumption(Request $request, PurchaseService $purchaseService) {
-        $planId = $request->input('plan_id');
-        $resuit = $purchaseService->calculateAverageConsumptionDaysPerQuantity($planId);
-        return response()->json($resuit);
+        $planIdAll = Purchase::pluck('plan_id')->all();
+
+        $results = [];
+        foreach ($planIdAll as $planId) {
+            $result = $purchaseService->calculateAverageConsumptionDaysPerQuantity($planId);
+            $results[$planId] = $result;
+        };
+
+        return Response::json($results, 200, [], JSON_NUMERIC_CHECK);
     }
+
 
 
 }

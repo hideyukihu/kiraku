@@ -21,7 +21,19 @@ export default function List() {
     unit_id: 0,
   });
   const [plan, setPlan] = useState<Plan[]>([]);
-  const [averageComsumption, setAverageComsumption] = useState([]);
+
+  interface AverageConsumption {
+    [key: string]: number;
+  }
+  // averageComsumptionオブジェクトを初期化
+  const [averageComsumption, setAverageComsumption] = useState<AverageConsumption>(() => {
+    const initialAverageComsumption: AverageConsumption = {};
+    plan.map((plan: Plan) => {
+      initialAverageComsumption[plan.id] = 0;
+    });
+    return initialAverageComsumption;
+  });
+
 
 
   function handleChangeCategory(e: any) {
@@ -63,12 +75,28 @@ export default function List() {
   };
 
   const planindex = async () => {
-    await Axios.get('/api/plans')
-      .then((res) => {
-        console.log(res.data);
-        setPlan(res.data);
+    try {
+      const response = await Axios.get('/api/plans');
+      console.log(response.data);
+      setPlan(response.data);
+  
+      // プランの取得が完了してから平均消費量を取得する
+      const averageConsumptionPromises = response.data.map((plan: any) =>
+        Axios.post(`api/purchases/average-consumption`, { plan_id: plan.id })
+          .then((res: any) => res.data.total_quantities)
+      );
+  
+      const averageConsumptions = await Promise.all(averageConsumptionPromises);
+      const averageConsumptionMap: AverageConsumption = {};
+      response.data.forEach((plan: any, index: number) => {
+        averageConsumptionMap[plan.id] = averageConsumptions[index];
       });
+      setAverageComsumption(averageConsumptionMap);
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+    }
   };
+  
 
   const logout = () => {
     Axios.post('/api/logout').then((res) => {
@@ -81,10 +109,6 @@ export default function List() {
     categoryindex();
     unitindex();
     planindex();
-
-
-
-
   }, []);
 
   const itemstore = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -128,7 +152,7 @@ export default function List() {
     Axios.post(`api/purchases/average-consumption`, { plan_id: id })
       .then((res: any) => {
         console.log(res.data);
-        setAverageComsumption(res.data);
+        setAverageComsumption(prevState => ({ ...prevState, [id]: res.data.total_quantities }));
       });
 
 
@@ -236,10 +260,11 @@ export default function List() {
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                   <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption}</td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[plan.id]}</td>
               </tr>
             )
           ))}
+
         </tbody>
       </table>
 
