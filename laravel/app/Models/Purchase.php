@@ -10,7 +10,7 @@ class Purchase extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['quantity', 'plan_id', 'date'];
+    protected $fillable = ['id', 'quantity', 'plan_id', 'date'];
 
     public function plan()
     {

@@ -9,7 +9,7 @@ class Plan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['is_purchase', 'quantity', 'user_id', 'item_id'];
+    protected $fillable = ['id', 'is_purchase', 'quantity', 'user_id', 'item_id'];
 
     public function items()
     {

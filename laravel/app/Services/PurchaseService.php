@@ -9,27 +9,21 @@ class PurchaseService
 {
     public function calculateAverageConsumptionDaysPerQuantity($planId)
     {
-        // $totalDays = Purchase::where('plan_id', $planId)
-        //     ->selectRaw('DATEDIFF(MAX(`date`), MIN(`date`)) + 1');
-
-        // $totalQuantities = Purchase::where('plan_id', $planId)
-        //     ->groupBy('quantity')
-        //     ->selectRaw('SUM(quantity) as total_quantity')
-        //     ->pluck('total_quantity', 'quantity');
-
-
         $totalDaysResult = DB::selectOne('SELECT DATEDIFF(MAX(`date`), MIN(`date`)) + 1 AS total_days
         FROM purchases
         WHERE plan_id = ?', [$planId]);
 
-        $totalQuantitiesResult = DB::selectOne('SELECT SUM(quantity) as total_quantities
+        $QuantitiesResult = DB::select('SELECT SUM(quantity) as total_quantities
         FROM purchases
         WHERE plan_id = ?
         GROUP BY quantity', [$planId]);
-        dd($totalQuantitiesResult);
+
+        $totalQuantities = 0;
+        foreach ($QuantitiesResult as $result) {
+            $totalQuantities += $result->total_quantities;
+        }
 
         $totalDays = $totalDaysResult->total_days ?? 0;
-        $totalQuantities = $totalQuantitiesResult->total_quantities ?? 0;
 
         if ($totalQuantities != 0) {
             return floatval($totalDays) / floatval($totalQuantities);

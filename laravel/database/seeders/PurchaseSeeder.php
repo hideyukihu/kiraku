@@ -14,22 +14,25 @@ class PurchaseSeeder extends Seeder
     public function run(): void
     {
         Purchase::create([
+            'id' => 1,
             'plan_id' => 1,
-            'quantity' => 10,
+            'quantity' => 5,
             'date' => '2023-06-01',
         ]);
 
         Purchase::create([
+            'id' => 2,
             'plan_id' => 1,
             'quantity' => 5,
-            'date' => '2023-06-05',
-        ]);
-
-        Purchase::create([
-            'plan_id' => 2,
-            'quantity' => 4,
             'date' => '2023-06-10',
         ]);
+
+        // Purchase::create([
+        //     'id' => 3,
+        //     'plan_id' => 1,
+        //     'quantity' => 5,
+        //     'date' => '2023-06-10',
+        // ]);
 
     }
 }
