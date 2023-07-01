@@ -29,8 +29,6 @@ export default function List() {
   const [averageComsumption, setAverageComsumption] = useState<AverageConsumption>({
   });
 
-
-
   function handleChangeCategory(e: any) {
     setItem({ name: item.name, category_id: e.target.value, unit_id: item.unit_id });
   }
@@ -45,8 +43,6 @@ export default function List() {
 
   // 関数を呼び出してAxiosインスタンスを取得
   const Axios = createAxiosInstance();
-
-
 
   const categoryindex = async () => {
     await Axios.get('/api/categories')
@@ -69,22 +65,6 @@ export default function List() {
       const response = await Axios.get('/api/plans');
       console.log(response.data);
       setPlan(response.data);
-  
-      // プランの取得が完了してから平均消費量を取得する
-    //   const averageConsumptionPromises = response.data.map((plan: any) =>
-    //     Axios.post(`api/purchases/average-consumption`, { plan_id: plan.id })
-    //       .then((res: any) => res.data.total_quantities)
-    //   );
-  
-    //   const averageConsumptions = await Promise.all(averageConsumptionPromises);
-    //   const averageConsumptionMap: AverageConsumption = {};
-    //   response.data.forEach((plan: any, index: number) => {
-    //     averageConsumptionMap[plan.id] = averageConsumptions[index];
-    //   });
-    //   setAverageComsumption(averageConsumptionMap);
-    // } catch (error) {
-    //   console.error('Error fetching plans:', error);
-    // }
   };
   
 
@@ -114,7 +94,6 @@ export default function List() {
 
       });
   };
-
 
   const chengePlanIsPurchase = (id: any) => {
     Axios.get(`/api/plans/${id}`)
@@ -149,9 +128,6 @@ export default function List() {
         console.log(averageComsumption); // ここで更新後の値が表示される
       });
     
-
-
-
   };
 
   return (
@@ -254,7 +230,7 @@ export default function List() {
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                   <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[1]}</td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[plan.id]}</td>
               </tr>
             )
           ))}
