@@ -26,12 +26,7 @@ export default function List() {
     [key: string]: number;
   }
   // averageComsumptionオブジェクトを初期化
-  const [averageComsumption, setAverageComsumption] = useState<AverageConsumption>(() => {
-    const initialAverageComsumption: AverageConsumption = {};
-    plan.map((plan: Plan) => {
-      initialAverageComsumption[plan.id] = 0;
-    });
-    return initialAverageComsumption;
+  const [averageComsumption, setAverageComsumption] = useState<AverageConsumption>({
   });
 
 
@@ -47,11 +42,6 @@ export default function List() {
   }
 
   console.log(item);
-
-
-
-
-
 
   // 関数を呼び出してAxiosインスタンスを取得
   const Axios = createAxiosInstance();
@@ -75,26 +65,26 @@ export default function List() {
   };
 
   const planindex = async () => {
-    try {
+    // try {
       const response = await Axios.get('/api/plans');
       console.log(response.data);
       setPlan(response.data);
   
       // プランの取得が完了してから平均消費量を取得する
-      const averageConsumptionPromises = response.data.map((plan: any) =>
-        Axios.post(`api/purchases/average-consumption`, { plan_id: plan.id })
-          .then((res: any) => res.data.total_quantities)
-      );
+    //   const averageConsumptionPromises = response.data.map((plan: any) =>
+    //     Axios.post(`api/purchases/average-consumption`, { plan_id: plan.id })
+    //       .then((res: any) => res.data.total_quantities)
+    //   );
   
-      const averageConsumptions = await Promise.all(averageConsumptionPromises);
-      const averageConsumptionMap: AverageConsumption = {};
-      response.data.forEach((plan: any, index: number) => {
-        averageConsumptionMap[plan.id] = averageConsumptions[index];
-      });
-      setAverageComsumption(averageConsumptionMap);
-    } catch (error) {
-      console.error('Error fetching plans:', error);
-    }
+    //   const averageConsumptions = await Promise.all(averageConsumptionPromises);
+    //   const averageConsumptionMap: AverageConsumption = {};
+    //   response.data.forEach((plan: any, index: number) => {
+    //     averageConsumptionMap[plan.id] = averageConsumptions[index];
+    //   });
+    //   setAverageComsumption(averageConsumptionMap);
+    // } catch (error) {
+    //   console.error('Error fetching plans:', error);
+    // }
   };
   
 
@@ -149,11 +139,16 @@ export default function List() {
       });
 
 
-    Axios.post(`api/purchases/average-consumption`, { plan_id: id })
+      Axios.post(`api/purchases/average-consumption`, { plan_id: id })
       .then((res: any) => {
         console.log(res.data);
-        setAverageComsumption(prevState => ({ ...prevState, [id]: res.data.total_quantities }));
+        setAverageComsumption(res.data );
+        console.log(averageComsumption); // ここでは更新される前の値が表示される
+      })
+      .then(() => {
+        console.log(averageComsumption); // ここで更新後の値が表示される
       });
+    
 
 
 
@@ -225,7 +220,6 @@ export default function List() {
                 </tr>
               );
             }
-            return null;  // is_purchaseが0でない場合は何も表示しない
           })}
         </tbody>
 
@@ -260,7 +254,7 @@ export default function List() {
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
                   <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
                 </td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[plan.id]}</td>
+                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[1]}</td>
               </tr>
             )
           ))}
