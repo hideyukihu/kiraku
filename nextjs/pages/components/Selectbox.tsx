@@ -1,5 +1,20 @@
 import React from 'react';
-const Selectbox = ({ value, options, optiontheme, onChange }) => {
+
+// オプションの型を定義
+export type Option = {
+  id: number;
+  name: string;
+};
+
+// propsの型を定義
+type SelectboxProps = {
+  value: number | string;
+  options: Option[];
+  optiontheme: string;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+const Selectbox: React.FC<SelectboxProps> = ({ value, options, optiontheme, onChange }) => {
 
   return (
     <select
