@@ -9,6 +9,7 @@ import { Plan } from '../types/Plan';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Selectbox from '../components/Selectbox';
+import ShoppingList from '../components/ShopList';
 
 
 export default function List() {
@@ -151,79 +152,7 @@ export default function List() {
 
       <button onClick={itemstore} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2">登録</button>
 
-      <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
-        買い物リスト
-      </h2>
-      <table className="bg-white min-w-full">
-        <thead>
-          <tr>
-            <th className="w-1/4  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              品名
-            </th>
-            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              数量
-            </th>
-            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              単位
-            </th>
-            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {plan.map((plan: any) => {
-            if (plan.is_purchase === 0) {
-              return (
-                <tr key={plan.id} className="text-gray-700">
-                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                  <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                  <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
-                  <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
-                    <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">購入済み</button>
-                  </td>
-                </tr>
-              );
-            }
-          })}
-        </tbody>
-
-      </table>
-
-      <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
-        購入済みリスト
-      </h2>
-      <table className="bg-white min-w-full">
-        <thead>
-          <tr>
-            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              品名
-            </th>
-            <th className="w-1/12 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              数量
-            </th>
-            <th className="w-1/12  border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">
-              単位
-            </th>
-            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900"></th>
-            <th className="w-1/4 border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-normal text-gray-900">平均消費日数（日数/数量）</th>
-          </tr>
-        </thead>
-        <tbody>
-          {plan.map((plan: any) => (
-            plan.is_purchase === 1 && (
-              <tr key={plan.id} className="text-gray-700" data-value={plan.id}>
-                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.quantity}</td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.unit.name}</td>
-                <td className="w-1/4 border-b-2 p-4 dark:border-dark-5">
-                  <button onClick={() => chengePlanIsPurchase(plan.id)} className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-300 m-2">買い物リストへ戻す</button>
-                </td>
-                <td className="w-1/12 border-b-2 p-4 dark:border-dark-5 text-center">{averageComsumption[plan.id]}</td>
-              </tr>
-            )
-          ))}
-
-        </tbody>
-      </table>
+      <ShoppingList plan={plan} chengePlanIsPurchase={chengePlanIsPurchase} averageComsumption={averageComsumption}/>
 
       <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block my-2">ログイン画面へ</Link>
       <button onClick={logout} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2">ログアウト</button>
