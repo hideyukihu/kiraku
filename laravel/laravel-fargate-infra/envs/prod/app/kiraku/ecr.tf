@@ -32,5 +32,11 @@ module "php" {
     name = "${local.name_prefix}-${local.service_name}-php"
 }
 
+module "next" {
+    source = "../../../../modules/ecr"
+
+    name = "${local.name_prefix}-${local.service_name}-php"
+}
+
 
 
