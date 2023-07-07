@@ -21,22 +21,12 @@ resource "aws_ecr_lifecycle_policy" "nginx" {
   repository = aws_ecr_repository.nginx.name
 }
 
-module "nginx" {
-  source = "../../../../modules/ecr"
-  name   = "${local.name_prefix}-${local.service_name}-nginx"
-}
-
 module "php" {
     source = "../../../../modules/ecr"
 
     name = "${local.name_prefix}-${local.service_name}-php"
 }
 
-module "next" {
-    source = "../../../../modules/ecr"
-
-    name = "${local.name_prefix}-${local.service_name}-php"
-}
 
 
 
