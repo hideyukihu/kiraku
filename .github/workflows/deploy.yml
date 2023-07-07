@@ -34,7 +34,7 @@ jobs:
           ENV_NAME: prod
         run: echo "ENV_NAME=prod" >> $GITHUB_ENV
       
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
 
       # - run: cd ../../laravel
       # - run: docker-compose up -d --build app web
