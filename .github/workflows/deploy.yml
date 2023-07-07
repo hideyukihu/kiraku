@@ -36,8 +36,8 @@ jobs:
       
       - uses: actions/checkout@v2
 
-      - run: cd ../../laravel
-      - run: docker-compose up -d --build app web
+      # - run: cd ../../laravel
+      # - run: docker-compose up -d --build app web
 
       - name: Cache composer
         id: cache-composer
