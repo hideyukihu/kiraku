@@ -24,9 +24,9 @@ RUN wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer
 ENV TZ Asia/Tokyo
 
 # nginx setting
-# ADD ./infra/php/zzz-docker.conf /usr/local/etc/php-fpm.d/zzz-docker.conf
+ADD ./infra/php/zzz-docker.conf /usr/local/etc/php-fpm.d/zzz-docker.conf
 # php.iniの設定
-# ADD ./infra/php/php.ini /usr/local/etc/php/php.ini
+ADD ./infra/php/php.ini /usr/local/etc/php/php.ini
 
 # unix socket
 RUN mkdir /var/run/php-fpm
