@@ -39,7 +39,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_vpc_gateway_attachment" "gateway_attachment" {
+resource "aws_vpn_gateway_attachment" "gateway_attachment" {
   vpc_id              = aws_vpc.vpc.id
   internet_gateway_id = aws_internet_gateway.igw.id
 }
