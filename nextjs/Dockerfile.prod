@@ -4,13 +4,13 @@ ENV TZ Asia/Tokyo
 
 WORKDIR /usr/src/app
 
-COPY ./ ./
+COPY package*.json ./
 RUN apk update && apk add bash curl
 RUN npm install
+
+COPY ./ ./
 RUN npm run build
 
-
 EXPOSE 3000
-
 
 CMD ["npm", "run", "start"]

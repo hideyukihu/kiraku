@@ -22,11 +22,12 @@ RUN apk add --no-cache --virtual build-essentials \
 RUN wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer
 
 ENV TZ Asia/Tokyo
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # nginx setting
-ADD ./infra/php/zzz-docker.conf /usr/local/etc/php-fpm.d/zzz-docker.conf
+ADD ./zzz-docker.conf /usr/local/etc/php-fpm.d/zzz-docker.conf
 # php.iniの設定
-ADD ./infra/php/php.ini /usr/local/etc/php/php.ini
+ADD ./php.ini /usr/local/etc/php/php.ini
 
 # unix socket
 RUN mkdir /var/run/php-fpm
@@ -35,13 +36,15 @@ VOLUME ["/var/run/php-fpm"]
 # 作業ディレクトリ
 WORKDIR /app
 
+
+
 # copy soruce
 ADD . .
 
 # install composer libs and clear cache
-RUN composer install && \
-    php artisan cache:clear && \
-    php artisan config:clear && \
-    chmod -R 777 storage
+# RUN composer install && \
+#     php artisan cache:clear && \
+#     php artisan config:clear && \
+#     chmod -R 777 storage
 
 
