@@ -1,5 +1,7 @@
 import React from 'react';
 import { Plan } from '../types/Plan';
+import { useState, ChangeEvent, useEffect } from 'react';
+
 
 type ShoppingListProps = {
   plan: Plan[];
@@ -8,7 +10,9 @@ type ShoppingListProps = {
 };
 
 
-const ShoppingList= ({ plan, chengePlanIsPurchase, averageComsumption }: ShoppingListProps) => {
+
+
+const ShopList= ({ plan, chengePlanIsPurchase, averageComsumption }: ShoppingListProps) => {
   return (
     <>
       <h2 className="mb-2 mt-0 text-4xl font-extrabold leading-tight text-primary">
@@ -35,7 +39,7 @@ const ShoppingList= ({ plan, chengePlanIsPurchase, averageComsumption }: Shoppin
         </thead>
         {/* Table body */}
         <tbody>
-          {plan.map((planItem :any) => {
+          {plan?.map((planItem :any) => {
             if (planItem.is_purchase === 0) {
               return (
                 <tr key={planItem.id} className="text-gray-700">
@@ -77,7 +81,7 @@ const ShoppingList= ({ plan, chengePlanIsPurchase, averageComsumption }: Shoppin
           </tr>
         </thead>
         <tbody>
-          {plan.map((plan: any) => (
+          {plan?.map((plan: any) => (
             plan.is_purchase === 1 && (
               <tr key={plan.id} className="text-gray-700" data-value={plan.id}>
                 <td className="w-1/4 border-b-2 p-4 dark:border-dark-5 text-center">{plan.items.name}</td>
@@ -98,4 +102,5 @@ const ShoppingList= ({ plan, chengePlanIsPurchase, averageComsumption }: Shoppin
   );
 };
 
-export default ShoppingList;
+
+export default ShopList;

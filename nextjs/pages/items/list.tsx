@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactFragment, ReactPortal } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import createAxiosInstance from '../utils/axios';
@@ -9,7 +9,7 @@ import { Plan } from '../types/Plan';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Selectbox from '../components/Selectbox';
-import ShoppingList from '../components/ShopList';
+import ShoppingList  from '../components/ShopList';
 
 
 export default function List() {
@@ -78,10 +78,15 @@ export default function List() {
   };
 
   useEffect(() => {
-    categoryindex();
-    unitindex();
-    planindex();
+    const fetchData = async () => {
+      await categoryindex();
+      await unitindex();
+      await planindex();
+    };
+  
+    fetchData();
   }, []);
+  
 
   const itemstore = async (e: React.MouseEvent<HTMLButtonElement>) => {
     await Axios.post('/api/items', item)
@@ -162,9 +167,3 @@ export default function List() {
     </>
   );
 }
-
-// export async function getServerSideProps(content:any) {
-//   return {
-//     props:{ message: 'helllo hideyukihu'}
-//   }
-// }
