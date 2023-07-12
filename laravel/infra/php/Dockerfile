@@ -42,9 +42,10 @@ WORKDIR /app
 ADD . .
 
 # install composer libs and clear cache
-# RUN composer install && \
-#     php artisan cache:clear && \
-#     php artisan config:clear && \
-#     chmod -R 777 storage
+RUN composer install && \
+		php artisan cache:clear && \
+		php artisan config:clear && \
+    php artisan config:cache && \
+		chmod -R 777 storage
 
 
