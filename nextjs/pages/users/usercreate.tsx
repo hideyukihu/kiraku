@@ -16,6 +16,7 @@ export default function UserCreate() {
   const [password, setPassword] = useState('');
 
   const http = axios.create({
+    baseURL: 'https://laravel-fnxmbkzfhq-an.a.run.app',
     withCredentials: true,
   });
 

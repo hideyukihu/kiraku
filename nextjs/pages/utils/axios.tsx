@@ -2,7 +2,7 @@ import axios from 'axios';
 
 function createAxiosInstance() {
   const Axios = axios.create({
-    baseURL: 'next-fnxmbkzfhq-an.a.run.app/://localhost',
+    baseURL: 'https://laravel-fnxmbkzfhq-an.a.run.app',
     withCredentials: true,
   });
 

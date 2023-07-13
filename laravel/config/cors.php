@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://next-fnxmbkzfhq-an.a.run.app'],
 
     'allowed_origins_patterns' => [],
 
