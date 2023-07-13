@@ -16,7 +16,6 @@ export default function UserCreate() {
   const [password, setPassword] = useState('');
 
   const http = axios.create({
-    baseURL: 'http://localhost',
     withCredentials: true,
   });
 

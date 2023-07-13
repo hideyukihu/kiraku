@@ -1,18 +1,24 @@
-FROM php:8.1-fpm-alpine
-
-RUN apk add --no-cache nginx wget
-
-RUN mkdir -p /run/nginx
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-RUN mkdir -p /app
+FROM composer:latest as build
+WORKDIR /app
 COPY . /app
 
-RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
-RUN cd /app && \
-    /usr/local/bin/composer install --no-dev
+FROM php:8.1-apache
+RUN apt update
+RUN apt install -y git
+RUN apt install -y vim
+RUN apt install -y zip unzip
+RUN docker-php-ext-install bcmath pdo_mysql
 
-RUN chown -R www-data: /app
+# composer install
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+EXPOSE 8080
+COPY --from=build /app /var/www/
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY .env /var/www/.env
 
-CMD sh ./docker/startup.sh
+
+RUN chmod 777 -R /var/www
+RUN echo "Listen 8080" >> /etc/apache2/ports.conf
+RUN chown -R www-data:www-data /var/www
+RUN a2enmod rewrite
 
