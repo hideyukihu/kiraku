@@ -6,7 +6,6 @@ function createAxiosInstance() {
     withCredentials: true,
   });
 
-  Axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'next-fnxmbkzfhq-an.a.run.app/';
 
   return Axios;
 }

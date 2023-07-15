@@ -2,11 +2,11 @@
  *  @type {import('next').NextConfig} 
  * */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
 }
 
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   // webpackDevMiddleware: config => {
   //   config.watchOptions = {
   //     poll: 5000,

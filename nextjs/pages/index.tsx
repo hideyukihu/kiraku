@@ -20,7 +20,9 @@ function Login() {
   const login = () => {
     Axios.get('/sanctum/csrf-cookie')
       .then((res) => {
-        Axios.post('/api/login', { email, password })
+        const xsrfToken = res.data.csrfToken;
+        Axios.defaults.headers.common['X-XSRF-TOKEN'] = xsrfToken;
+        Axios.post('/api/login', { email, password }, { withCredentials: true })
           .then((res) => {
             console.log(res); 
             router.push('/items/list');
